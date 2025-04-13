@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplicación de Mantenimiento</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <div class="max-w-4xl mx-auto p-4 space-y-8">
+    <!-- Logo -->
+    <div class="flex justify-center">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/06/Logo_Multiva_IronBank.png" alt="Logo" class="h-24">
+    </div>
+
+    <!-- Institucional -->
+    <section class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-2xl font-bold mb-4">¿Quiénes somos?</h2>
+      <p>Somos el área encargada del mantenimiento de equipos críticos en Multiva IronBank, asegurando un enfoque profesional y humano para mantener la infraestructura en óptimas condiciones.</p>
+      <h2 class="text-2xl font-bold mt-6 mb-2">Misión</h2>
+      <p>Garantizar el funcionamiento continuo y eficiente de los equipos mediante mantenimientos oportunos y una atención profesional orientada a la mejora continua.</p>
+      <h2 class="text-2xl font-bold mt-6 mb-2">Visión</h2>
+      <p>Ser un referente en servicios de mantenimiento dentro del sector financiero por nuestra eficiencia, compromiso y enfoque en la calidad.</p>
+      <h2 class="text-2xl font-bold mt-6 mb-2">Valores</h2>
+      <ul class="list-disc list-inside">
+        <li>Ética profesional</li>
+        <li>Empatía</li>
+        <li>Diversidad</li>
+        <li>Honestidad</li>
+        <li>Responsabilidad</li>
+      </ul>
+    </section>
+
+    <!-- Rutinas de mantenimiento -->
+    <section class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-2xl font-bold mb-4">Rutinas de mantenimiento</h2>
+      <div>
+        <details class="mb-2">
+          <summary class="cursor-pointer font-semibold">Bombas</summary>
+          <p class="ml-4 mt-2 text-sm">Mantenimiento de bombas hidráulicas, revisión de presión y sellado.</p>
+        </details>
+        <details class="mb-2">
+          <summary class="cursor-pointer font-semibold">Equipos eléctricos</summary>
+          <p class="ml-4 mt-2 text-sm">Revisión de conexiones, cargas y funcionamiento de transformadores.</p>
+        </details>
+        <details class="mb-2">
+          <summary class="cursor-pointer font-semibold">Equipos de emergencia</summary>
+          <p class="ml-4 mt-2 text-sm">Inspección de generadores, UPS y sistemas de respaldo.</p>
+        </details>
+        <details class="mb-2">
+          <summary class="cursor-pointer font-semibold">Equipos de seguridad</summary>
+          <p class="ml-4 mt-2 text-sm">Revisión de cámaras, alarmas y sensores de movimiento.</p>
+        </details>
+        <details class="mb-2">
+          <summary class="cursor-pointer font-semibold">Equipos de oficina</summary>
+          <p class="ml-4 mt-2 text-sm">Revisión de computadoras, impresoras y mobiliario.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Formulario de trabajo -->
+    <section class="bg-white p-6 rounded-2xl shadow">
+      <h2 class="text-2xl font-bold mb-4">Asignar orden de trabajo</h2>
+      <form id="workOrderForm" class="space-y-4">
+        <input type="text" name="proveedor" placeholder="Nombre del proveedor" class="w-full p-2 border rounded">
+        <input type="text" name="equipo" placeholder="Equipo a reparar" class="w-full p-2 border rounded">
+
+        <select name="nivel" class="w-full p-2 border rounded">
+          <option value="">Nivel de atención</option>
+          <option value="baja">Baja</option>
+          <option value="media">Media</option>
+          <option value="alta">Alta</option>
+        </select>
+
+        <input type="text" name="cotizacion" placeholder="Cotización" class="w-full p-2 border rounded">
+
+        <select name="tiempo" class="w-full p-2 border rounded">
+          <option value="">Tiempo de atención</option>
+          <option value="inmediata">Inmediata</option>
+          <option value="programada">Programada</option>
+        </select>
+
+        <input type="date" name="fecha" class="w-full p-2 border rounded">
+        <input type="time" name="hora" class="w-full p-2 border rounded">
+
+        <textarea name="comentarios" placeholder="Comentarios" class="w-full p-2 border rounded"></textarea>
+
+        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow">Enviar</button>
+        <div id="confirmacion" class="text-green-600 text-sm mt-2 hidden"></div>
+      </form>
+    </section>
+  </div>
+
+  <script>
+    const form = document.getElementById('workOrderForm');
+    const confirmacion = document.getElementById('confirmacion');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const datos = new FormData(form);
+      const obj = Object.fromEntries(datos.entries());
+
+      try {
+        await fetch('https://script.google.com/macros/s/AKfycbwqkIOnrvtAlrmEtrGKkGku2HvRWF5fkBIkEIxtMuOcVLEMJiTs28IfXWPCAhge6m1Kow/exec', {
+          method: 'POST',
+          body: JSON.stringify(obj),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        confirmacion.innerHTML = '✅ Gracias, tu OT ha sido agendada.<br>⏳ Redirigiendo al inicio...<br>🎉 Te contactaremos pronto.';
+        confirmacion.classList.remove('hidden');
+        form.reset();
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        setTimeout(() => {
+          confirmacion.classList.add('hidden');
+        }, 5000);
+
+      } catch (error) {
+        alert('Error al enviar la orden de trabajo. Intenta más tarde.');
+      }
+    });
+  </script>
+</body>
+</html>
